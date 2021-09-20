@@ -112,7 +112,60 @@ Erstellen Sie eine Abfrage, welche die Zeitdifferenzen anzeigt. Für die Zeitdif
 
 Es wurde eine Generelle Abfrage für alle und eine spezifische Abfrage erstellt. Die spezifische Abfrage gilt für die Fahrt mit der ID 720 vom 27.12.20.
 
-#### Script
+#### Ausgabe Generell
+
+```
+# Generell
+SELECT
+fsi.linie, fsi.richtung, fsi.fahrzeug,
+fsi.kurs,
+fsi.seq_von, fsi.halt_id_von, fsi.halt_id_nach, fsi.halt_punkt_id_von, fsi.halt_punkt_id_nach, fsi.fahrt_id, fsi.fahrweg_id, fsi.fw_no,
+fsi.fw_typ,
+fsi.fw_kurz,
+fsi.fw_lang, fsi.betriebs_datum, fsi.datumzeit_soll_an_von, fsi.datumzeit_ist_an_von, fsi.datumzeit_soll_ab_von, fsi.datumzeit_ist_ab_von, fsi.datum__nach,
+TIMEDIFF (datumzeit_soll_an_von, datumzeit_ist_an_von) as timediff_an,
+TIMESTAMPDIFF (SECOND, datumzeit_soll_an_von, datumzeit_ist_an_von) as timediff_an_seconds,
+TIMEDIFF (datumzeit_soll_ab_von, datumzeit_ist_ab_von) as timediff_ab,
+TIMESTAMPDIFF (SECOND, datumzeit_soll_ab_von, datumzeit_ist_ab_von) as timediff_ab_seconds,
+TIMESTAMPDIFF (SECOND, datumzeit_soll_an_von, datumzeit_soll_ab_von) as halt_soll_time_seconds,
+TIMESTAMPDIFF (SECOND, datumzeit_ist_an_von, datumzeit_ist_ab_von) as halt_ist_time_seconds
+FROM fahrzeiten_soll_ist fsi
+LIMIT 40000;
+```
+
+Das Bild zeigt nur einen Ausschnitt der Tabelle, da sehr viele Felder abgefragt werden.
+
+![Tabelle](img/a7_generell.jpg "Tabelle")
+
+#### Spezifische Ausgabe
+
+Gilt für die Fahrt mit der ID 720 vom 27.12.20.
+
+```
+# Fuer die Linie 5, am 27.12.20 mit der Fahrt ID 720
+SELECT
+fsi.linie, fsi.richtung, fsi.fahrzeug, fsi.kurs, fsi.seq_von,
+fsi.halt_id_von, fsi.halt_id_nach, fsi.halt_punkt_id_von,
+fsi.halt_punkt_id_nach, fsi.fahrt_id, fsi.fahrweg_id, fsi.fw_no,
+fsi.fw_typ, fsi.fw_kurz,fsi.fw_lang, fsi.betriebs_datum,
+fsi.datumzeit_soll_an_von, fsi.datumzeit_ist_an_von,
+fsi.datumzeit_soll_ab_von, fsi.datumzeit_ist_ab_von, fsi.datum__nach,
+TIMEDIFF (datumzeit_soll_an_von, datumzeit_ist_an_von) as timediff_an,
+TIMESTAMPDIFF (SECOND, datumzeit_soll_an_von, datumzeit_ist_an_von) as timediff_an_seconds,
+TIMEDIFF (datumzeit_soll_ab_von, datumzeit_ist_ab_von) as timediff_ab,
+TIMESTAMPDIFF (SECOND, datumzeit_soll_ab_von, datumzeit_ist_ab_von) as timediff_ab_seconds,
+TIMESTAMPDIFF (SECOND, datumzeit_soll_an_von, datumzeit_soll_ab_von) as halt_soll_time_seconds,
+TIMESTAMPDIFF (SECOND, datumzeit_ist_an_von, datumzeit_ist_ab_von) as halt_ist_time_seconds
+FROM fahrzeiten_soll_ist fsi
+WHERE fsi.linie = 5 AND datum_von = '27.12.20' AND fahrt_id = 720
+LIMIT 40000;
+```
+
+Das Bild zeigt nur einen Ausschnitt der Tabelle, da sehr viele Felder abgefragt werden.
+
+![Tabelle](img/a7_linie.jpg "Tabelle")
+
+#### Gesamtes Script
 
 ```
 use vbzdat;
@@ -156,10 +209,6 @@ LIMIT 40000;
 
 Link zum Script: [SQL Script](Scripts/a7.sql)
 
-#### Ausschnitt der Ausgabe
-
-![Tabelle](img/a7.jpg "Tabelle")
-
 ## 📝 Aufgabe 8: Linien Tabelle
 
 ### Aufgabenbeschreibung
@@ -168,7 +217,46 @@ Die Abfrage soll die Linie, die Richtung, die Fahrwegnummer und die Fahrwegbezei
 
 ### Lösung
 
-#### Script
+#### Aufgabe a
+
+Das Ergebnis zeigt, dass pro Linie (in diesem Fall 5) insgesamt 5 Varianten pro Richtung existieren. Der Grund ist, dass die Trams in ein Depo ein- und ausfahren sowie eine Linie je nach Tageszeit verkürzt geführt wird.
+
+```
+# Aufgabe a
+SELECT DISTINCT fsi.linie, fsi.richtung, fsi.fw_no, fsi.fw_lang
+FROM fahrzeiten_soll_ist fsi where fsi.linie = 5;
+```
+
+![SELECT](img/a8_a.jpg "Select")
+
+#### Aufgabe b
+
+Erstellen Sie aus der Abfrage eine View query_line.
+
+```
+# Aufgabe b
+CREATE OR REPLACE VIEW query_line
+AS SELECT DISTINCT fsi.linie, fsi.richtung, fsi.fw_no, fsi.fw_lang
+FROM fahrzeiten_soll_ist fsi where fsi.linie = 5;
+```
+
+![View](img/a8_b.jpg "View")
+
+#### Aufgabe c
+
+Erstellen Sie ein Skript mit einer Tabellenerstellungsabfrage create_line_table.
+Die Tabelle soll linie heissen. Der Primärschlüssel kann mit Hilfe von fahrweg_id gebildet werden.
+
+```
+# Aufgabe c
+CREATE TABLE linie (PRIMARY KEY (fahrweg_id))
+SELECT DISTINCT fsi.fahrweg_id, fsi.linie, fsi.richtung, fsi.fw_no, fsi.fw_lang
+FROM fahrzeiten_soll_ist fsi where fsi.linie = 5;
+```
+
+![Linie](img/a8_c.jpg "Linie")
+
+#### Gesamtes Script
 
 ```
 use vbzdat;
@@ -189,25 +277,6 @@ FROM fahrzeiten_soll_ist fsi where fsi.linie = 5;
 ```
 
 Link zum Script: [SQL Script](Scripts/a8.sql)
-
-#### Aufgabe a
-
-Das Ergebnis zeigt, dass pro Linie (in diesem Fall 5) insgesamt 5 Varianten pro Richtung existieren. Der Grund ist, dass die Trams in ein Depo ein- und ausfahren sowie eine Linie je nach Tageszeit verkürzt geführt wird.
-
-![SELECT](img/a8_a.jpg "Select")
-
-#### Aufgabe b
-
-Erstellen Sie aus der Abfrage eine View query_line.
-
-![View](img/a8_b.jpg "View")
-
-#### Aufgabe c
-
-Erstellen Sie ein Skript mit einer Tabellenerstellungsabfrage create_line_table.
-Die Tabelle soll linie heissen. Der Primärschlüssel kann mit Hilfe von fahrweg_id gebildet werden.
-
-![Linie](img/a8_c.jpg "Linie")
 
 ## 📝 Aufgabe 9: Ankunftszeiten Tabelle
 
@@ -270,7 +339,61 @@ Ermitteln Sie für eine Line (zum Beispiel Linie 9) eine Liste mit den 20 gröss
 
 Im unten verlinkten SQL Script befindet sich die Abfrage, sowie auch eine "temporäre" Tabelle um die Daten in das von maps.co/gis/ vordefinierte Format zu bringen. Diese Daten müssen dann als CSV exportiert und wieder in maps.co/gis/ importiert werden.
 
-#### Script und CSV
+#### Ausgabe der Verspätungen (Select)
+
+```
+# 20 grösste Verspätungen
+SELECT
+a.id,
+a.haltepunkt_id,
+h2.halt_lang,
+h.GPS_Latitude,
+h.GPS_Longitude,
+a.fahrweg_id,
+l.linie,
+a.datumzeit_ist_an,
+a.datumzeit_soll_an,
+a.delay
+FROM ankunftszeiten a
+LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
+LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
+LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id
+ORDER BY delay desc LIMIT 20
+```
+
+![Ausgabe Select](img/a10_select.jpg "Ausgabe Select")
+
+#### Ausgabe der Tabelle für den Export
+
+```
+# Tabelle für CSV Export
+CREATE TABLE verspaetungen
+SELECT
+h.GPS_Latitude as lat,
+h.GPS_Longitude as lng,
+h2.halt_lang as name,
+'#ff0000' as color,
+CONCAT(a.delay, " Sekunden Verspätung, Haltestelle: ", h2.halt_lang) as note
+FROM ankunftszeiten a
+LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
+LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
+LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id
+ORDER BY delay desc LIMIT 20
+```
+
+![Ausgabe Export](img/a10_export_table.jpg "Ausgabe Export")
+
+#### Map Ausgabe
+
+Nachdem das CSV in maps.co importiert wurde, erscheint folgende Ausgabe:
+
+![Map](img/a10_delay.jpg "Map")
+
+Ein Beispiel mit einem Pin:
+
+![Map](img/a10_delay_pin.jpg "Map")
+
+#### Gesamtes Script und CSV
 
 ```
 use vbzdat;
@@ -311,24 +434,6 @@ ORDER BY delay desc LIMIT 20
 Das Script: [SQL Script](Scripts/a10.sql)
 
 Das exportierte CSV: [CSV](csv/a10_verspaetungen.csv)
-
-#### Ausgabe der Verspätungen (Select)
-
-![Ausgabe Select](img/a10_select.jpg "Ausgabe Select")
-
-#### Ausgabe der Tabelle für den Export
-
-![Ausgabe Export](img/a10_export_table.jpg "Ausgabe Export")
-
-#### Map Ausgabe
-
-Nachdem das CSV in maps.co importiert wurde, erscheint folgende Ausgabe:
-
-![Map](img/a10_delay.jpg "Map")
-
-Ein Beispiel mit einem Pin:
-
-![Map](img/a10_delay_pin.jpg "Map")
 
 ## 📝 Aufgabe 11: Graphische Visualisierung einer Linie
 
