@@ -607,3 +607,47 @@ Link zum Script: [SQL Script](Scripts/a14.sql)
 #### Ausgabe der Tabelle
 
 ![Distanzen](img/a14.jpg "Distanzen")
+
+## 📝 Bonus Aufgabe
+
+Da ich die Aufgabe 13 am Anfang falsch interpretiert habe, möchte ich trotzdem gerne mein Ergebnis hier Dokumentieren.
+
+Ich hatte die Aufgabe so verstanden, dass aufgrund eines beliebigen Breiten- und Längengrades die zugehörige Haltestelle ermittelt werden muss. Danach sollen die zu der ermittelten Haltestelle nächsten 4 Haltestellen gemäss Fahrplan herausgefunden werden.
+
+Bevor ich gemerkt habe, dass ich die Aufgabe falsch verstanden habe, habe ich ein Script geschrieben welches aufgrund von Breiten und Längengrad die nächste Haltestelle ermitteln kann.
+
+### Das Script
+
+```
+SELECT h4.halt_lang FROM (
+	SELECT fsi.halt_id_nach
+	FROM fahrzeiten_soll_ist fsi
+	WHERE fsi.halt_id_von IN (
+		SELECT h.halt_id
+		FROM ankunftszeiten a
+		LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
+		LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
+		WHERE h.GPS_Latitude = '47.396093' AND h.GPS_Longitude = '8.545106'
+		GROUP BY h.halt_id
+	)
+	AND fsi.richtung = 1
+	GROUP BY fsi.halt_id_nach
+) as s1
+LEFT JOIN haltepunkt h3 ON h3.halt_id = s1.halt_id_nach
+LEFT JOIN Haltestelle h4 on h4.halt_id = h3.halt_id
+WHERE h4.halt_lang NOT LIKE '%DEPOT%'
+GROUP BY h4.halt_lang
+
+```
+
+Link zum Script: [SQL Script](Scripts/bonus.sql)
+
+### Die Ausgabe
+
+![Ausgabe](img/bonus.jpg "Bonus")
+
+### Nächste Schritte
+
+Um die Aufgabe zu vervollständigen, wäre eine Rekursion notwendig gewesen. Die Rekursion hätte jeweils die ermittelte "nach" ID der Haltestelle wieder als "von" ID der nächsten Iteration verwenden sollen. Die Wiederholung muss auf 4 Iterationen beschränkt werden.
+
+An dieser Stelle habe ich die Aufgabe abgebrochen und die Zeit in die richtige Variante der Aufgabe 13 investiert.
