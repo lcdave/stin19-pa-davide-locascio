@@ -219,7 +219,7 @@ Als Lösung wurde die direkte Variante mit einer Tabellenerstellungsabfrage gew�
 
 ### Lösung
 
-#### Script
+#### Script
 
 ```
 use vbzdat;
@@ -310,7 +310,7 @@ ORDER BY delay desc LIMIT 20
 
 Das Script: [SQL Script](Scripts/a10.sql)
 
-Das exportierte CSV: [SQL Script](csv/a10_verspaetungen.csv)
+Das exportierte CSV: [CSV](csv/a10_verspaetungen.csv)
 
 #### Ausgabe der Verspätungen (Select)
 
@@ -360,7 +360,7 @@ ORDER BY a.datumzeit_ist_an
 
 Das Script: [SQL Script](Scripts/a11.sql)
 
-Das exportierte CSV: [SQL Script](csv/a11_713.csv)
+Das exportierte CSV: [CSV](csv/a11_713.csv)
 
 #### Ausgabe der Tabelle für den CSV Export
 
@@ -398,7 +398,7 @@ ORDER BY a.fahrt_id, a.datumzeit_soll_ab ASC;
 
 Link zum Script: [SQL Script](Scripts/a12.sql)
 
-#### Ausgabe der Tabelle
+#### Ausgabe der Tabelle
 
 Ein Ausschnitt des Ergebnisses für die Fahrt mit der ID 713:
 
@@ -454,7 +454,7 @@ LIMIT 4;
 
 Das Script: [SQL Script](Scripts/a13.sql)
 
-Das exportierte CSV: [SQL Script](csv/a13.csv)
+Das exportierte CSV: [CSV](csv/a13.csv)
 
 #### Ausgabe der Tabelle
 
@@ -462,7 +462,7 @@ Das exportierte CSV: [SQL Script](csv/a13.csv)
 
 #### Map Ausgabe
 
-Der gelbe Pink ist der aktuelle Standort. Die roten Pins sind die 4 nächsten Haltestellen
+Der gelbe Marker ist der aktuelle Standort. Die roten Marker sind die 4 nächsten Haltestellen
 
 ![Map](img/a13_map.jpg "Map")
 
