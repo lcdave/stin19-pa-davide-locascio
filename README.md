@@ -567,7 +567,7 @@ Das exportierte CSV: [CSV](csv/a13.csv)
 
 #### Map Ausgabe
 
-Der gelbe Marker ist der aktuelle Standort. Die roten Marker sind die 4 nächsten Haltestellen
+Der gelbe Marker ist der aktuelle Standort (Unterstrass, 8057 Zürich). Die roten Marker sind die 4 nächsten Haltestellen
 
 ![Map](img/a13_map.jpg "Map")
 
