@@ -16,7 +16,7 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id 
-ORDER BY delay desc LIMIT 20
+ORDER BY delay desc LIMIT 20;
 
 # Tabelle für CSV Export
 CREATE TABLE verspaetungen
@@ -30,4 +30,4 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id 
-ORDER BY delay desc LIMIT 20
+ORDER BY delay desc LIMIT 20;

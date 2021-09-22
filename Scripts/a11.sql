@@ -12,4 +12,4 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 WHERE a.fahrt_id = 713 AND DATE(a.datumzeit_ist_an) = '2021-01-01'
-ORDER BY a.datumzeit_ist_an
+ORDER BY a.datumzeit_ist_an;

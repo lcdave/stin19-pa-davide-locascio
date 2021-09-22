@@ -358,7 +358,7 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id
-ORDER BY delay desc LIMIT 20
+ORDER BY delay desc LIMIT 20;
 ```
 
 ![Ausgabe Select](img/a10_select.jpg "Ausgabe Select")
@@ -378,7 +378,7 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id
-ORDER BY delay desc LIMIT 20
+ORDER BY delay desc LIMIT 20;
 ```
 
 ![Ausgabe Export](img/a10_export_table.jpg "Ausgabe Export")
@@ -414,7 +414,7 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id
-ORDER BY delay desc LIMIT 20
+ORDER BY delay desc LIMIT 20;
 
 # Tabelle für CSV Export
 CREATE TABLE verspaetungen
@@ -428,7 +428,7 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 LEFT JOIN linie l on a.fahrweg_id = l.fahrweg_id
-ORDER BY delay desc LIMIT 20
+ORDER BY delay desc LIMIT 20;
 ```
 
 Das Script: [SQL Script](Scripts/a10.sql)
@@ -460,7 +460,7 @@ FROM ankunftszeiten a
 LEFT JOIN haltepunkt h ON h.halt_punkt_id = a.haltepunkt_id
 LEFT JOIN Haltestelle h2 ON h2.halt_id = h.halt_id
 WHERE a.fahrt_id = 713 AND DATE(a.datumzeit_ist_an) = '2021-01-01'
-ORDER BY a.datumzeit_ist_an
+ORDER BY a.datumzeit_ist_an;
 ```
 
 Das Script: [SQL Script](Scripts/a11.sql)
@@ -636,7 +636,7 @@ SELECT h4.halt_lang FROM (
 LEFT JOIN haltepunkt h3 ON h3.halt_id = s1.halt_id_nach
 LEFT JOIN Haltestelle h4 on h4.halt_id = h3.halt_id
 WHERE h4.halt_lang NOT LIKE '%DEPOT%'
-GROUP BY h4.halt_lang
+GROUP BY h4.halt_lang;
 
 ```
 

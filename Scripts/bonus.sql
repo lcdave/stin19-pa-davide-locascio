@@ -15,4 +15,4 @@ SELECT h4.halt_lang FROM (
 LEFT JOIN haltepunkt h3 ON h3.halt_id = s1.halt_id_nach
 LEFT JOIN Haltestelle h4 on h4.halt_id = h3.halt_id
 WHERE h4.halt_lang NOT LIKE '%DEPOT%'
-GROUP BY h4.halt_lang
+GROUP BY h4.halt_lang;
